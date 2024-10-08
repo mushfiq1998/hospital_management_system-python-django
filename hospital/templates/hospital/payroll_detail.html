@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+        .employee-photo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .employee-photo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #4CAF50;
+        }
+        .no-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: #4CAF50;
+            margin: 0 auto;
+        }
+        .payroll-info {
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .payroll-info p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payroll-info strong {
+            color: #2e7d32;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-file-invoice-dollar"></i> Payroll Detail</h1>
+        <div class="employee-photo">
+            {% if payroll.employee.photo %}
+                <img src="{{ payroll.employee.photo.url }}" alt="{{ payroll.employee.name }}">
+            {% else %}
+                <div class="no-photo">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+        </div>
+        <div class="payroll-info">
+            <p><strong>Employee:</strong> {{ payroll.employee.name }}</p>
+            <p><strong>Salary:</strong> ${{ payroll.salary }}</p>
+            <p><strong>Bonus:</strong> ${{ payroll.bonus }}</p>
+            <p><strong>Deductions:</strong> ${{ payroll.deductions }}</p>
+            <p><strong>Total Pay:</strong> ${{ payroll.total_pay }}</p>
+            <p><strong>Pay Date:</strong> {{ payroll.pay_date }}</p>
+        </div>
+        <a href="{% url 'payroll_list' %}" class="btn"><i class="fas fa-arrow-left"></i> Back to Payroll List</a>
+    </div>
+</body>
+</html>

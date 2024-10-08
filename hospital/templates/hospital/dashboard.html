@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #2e7d32;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        h1, h2 {
+            color: #2e7d32;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .card-icon {
+            font-size: 36px;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .stats {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .card-link {
+            display: block;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .card-link:hover {
+            background-color: #45a049;
+        }
+        .logout-link {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .logout-link:hover {
+            background-color: #45a049;
+        }
+        .quick-admission select, .quick-admission input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .quick-admission input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .quick-admission input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .account-management-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .account-management-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Hospital Management Dashboard</h1>
+        <a href="{% url 'account_management' %}" class="account-management-link">Account Management</a>
+        <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">Employees</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-users"></i></div>
+                    <p>Manage hospital staff, including nurses, technicians, and administrative personnel.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-user-nurse"></i> {{ employees_count }} Employees</span>
+                    </div>
+                </div>
+                <a href="{% url 'employee_list' %}" class="card-link">View All Employees</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Doctors</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-user-md"></i></div>
+                    <p>Manage doctors, their specialties, and schedules.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-stethoscope"></i> {{doctors_count}} Doctors</span>
+                    </div>
+                </div>
+                <a href="{% url 'doctor_list' %}" class="card-link">View All Doctors</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Patients</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-procedures"></i></div>
+                    <p>Manage patient records, medical histories, and treatments.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-bed"></i> {{patients_count}} Patients</span>
+                    </div>
+                </div>
+                <a href="{% url 'patient_list' %}" class="card-link">View All Patients</a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Appointments</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="far fa-calendar-check"></i></div>
+                    <p>Manage and view upcoming appointments, schedules, and patient visits.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-calendar-week"></i> {{appointments_count}} Appointments</span>
+                    </div>
+                </div>
+                <a href="{% url 'appointment_list' %}" class="card-link">View All Appointments</a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Wards</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-hospital"></i></div>
+                    <p>Manage hospital wards, their capacity, and occupancy.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-door-open"></i> {{wards_count}} Wards</span>
+                    </div>
+                </div>
+                <a href="{% url 'ward_list' %}" class="card-link">View All Wards</a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Beds</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-bed"></i></div>
+                    <p>Monitor and manage bed availability across all wards.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-procedures"></i> {{beds_count}} Beds</span>
+                    </div>
+                </div>
+                <a href="{% url 'bed_list' %}" class="card-link">View All Beds</a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">OT Bookings</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-procedures"></i></div>
+                    <p>Manage Operation Theater bookings and schedules.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-calendar-check"></i> 
+                            {{upcoming_ot_bookings}} Upcoming
+                        </span>
+                        <span><i class="fas fa-spinner"></i> 
+                            {{ongoing_ot_bookings}} Ongoing
+                        </span>
+                    </div>
+                </div>
+                <a href="{% url 'ot_booking_list' %}" class="card-link">
+                    View OT Bookings
+                </a>
+            </div>
+
+            <div class="card quick-admission">
+                <div class="card-header">Quick Patient Admission</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                    <p>Quickly admit a patient to the hospital.</p>
+                    <form method="get" action="{% url 'admit_patient' 0 %}">
+                        <select name="patient_id" required>
+                            <option value="">Select a patient</option>
+                            {% for patient in patients %}
+                                <option value="{{ patient.id }}">
+                                    {{ patient.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Admit Patient">
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Payroll</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-money-check-alt"></i></div>
+                    <p>Manage employee salaries, bonuses, and deductions.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-file-invoice-dollar"></i> {{ payroll_count }} Payroll Records</span>
+                    </div>
+                </div>
+                <a href="{% url 'payroll_list' %}" class="card-link">View Payroll</a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Patient Billing</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <p>Manage patient billing and payment information.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-money-bill-wave"></i>
+                             Total: ${{ total_billing|floatformat:2 }}
+                        </span>
+                        <span><i class="fas fa-exclamation-triangle"></i>
+                             Unpaid: ${{ unpaid_billing|floatformat:2 }}
+                        </span>
+                    </div>
+                </div>
+                <a href="{% url 'patient_billing_list' %}" class="card-link">
+                    View Patient Billing
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Pharmacy Management</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-pills"></i></div>
+                    <p>Manage medications and prescriptions.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-capsules"></i> Medications</span>
+                        <span><i class="fas fa-file-medical"></i> Prescriptions</span>
+                    </div>
+                </div>
+                <a href="{% url 'medication_list' %}" class="card-link">View Medications</a>
+                <a href="{% url 'prescription_list' %}" class="card-link">View Prescriptions</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Prescription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .btn-secondary {
+            background-color: #f44336;
+        }
+        .btn-secondary:hover {
+            background-color: #da190b;
+        }
+        .formset-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .medication-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .add-medication {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .remove-medication {
+            background-color: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Prescription</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <h3>Medications</h3>
+            {{ items.management_form }}
+            <div id="medication-items">
+                {% for item_form in items.forms %}
+                    <div class="medication-item">
+                        {{ item_form.as_p }}
+                        {% if forloop.counter > 1 %}
+                            <button type="button" class="remove-medication">Remove Medication</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-medication">Add Medication</button>
+            <button type="submit">Save Prescription</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var itemsContainer = $('#medication-items');
+            var totalForms = $('#id_items-TOTAL_FORMS');
+
+            function updateElementIndex(el, prefix, ndx) {
+                var id_regex = new RegExp('(' + prefix + '-\\d+)');
+                var replacement = prefix + '-' + ndx;
+                if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+                if (el.id) el.id = el.id.replace(id_regex, replacement);
+                if (el.name) el.name = el.name.replace(id_regex, replacement);
+            }
+
+            function addForm(btn, prefix) {
+                var formCount = parseInt(totalForms.val());
+                var row = $('.medication-item:first').clone(true).get(0);
+                $(row).removeAttr('id').insertAfter($('.medication-item:last')).children('.hidden').removeClass('hidden');
+                $(row).children().not(':last').children().each(function() {
+                    updateElementIndex(this, prefix, formCount);
+                    $(this).val('');
+                });
+                $(row).find('.remove-medication').show();
+                totalForms.val(formCount + 1);
+                return false;
+            }
+
+            function deleteForm(btn, prefix) {
+                $(btn).parents('.medication-item').remove();
+                var forms = $('.medication-item');
+                totalForms.val(forms.length);
+                for (var i=0, formCount=forms.length; i<formCount; i++) {
+                    $(forms.get(i)).children().not(':last').children().each(function() {
+                        updateElementIndex(this, prefix, i);
+                    });
+                }
+                return false;
+            }
+
+            $(document).on('click', '.add-medication', function(e) {
+                e.preventDefault();
+                addForm(this, 'items');
+                return false;
+            });
+
+            $(document).on('click', '.remove-medication', function(e) {
+                e.preventDefault();
+                deleteForm(this, 'items');
+                return false;
+            });
+
+            // Hide the first remove button
+            $('.medication-item:first .remove-medication').hide();
+        });
+    </script>
+</body>
+</html>

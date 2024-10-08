@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient List</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .add-patient, .back-to-dashboard {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .add-patient:hover, .back-to-dashboard:hover {
+            background-color: #45a049;
+        }
+        .patient-photo {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .no-photo {
+            width: 50px;
+            height: 50px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Patient List</h1>
+    <a class="add-patient" href="{% url 'patient_add' %}">Add Patient</a>
+    <a class="back-to-dashboard" href="{% url 'dashboard' %}" style="float: right;">
+        Back to Dashboard
+    </a><br><br>
+    <div>
+        <a href="{% url 'patient_list' %}?type=all">All Patients</a> |
+        <a href="{% url 'patient_list' %}?type=indoor">Indoor Patients</a> |
+        <a href="{% url 'patient_list' %}?type=outdoor">Outdoor Patients</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Patient Type</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr>
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.date_of_birth|default_if_none:"N/A" }}</td>
+                <td>{{ patient.get_gender_display|default_if_none:"N/A" }}</td>
+                <td>{{ patient.phone_number|default_if_none:"N/A" }}</td>
+                <td>{{ patient.email|default_if_none:"N/A" }}</td>
+                <td>{{ patient.address|default_if_none:"N/A" }}</td>
+                <td>{{ patient.get_patient_type_display }}</td>
+                <td>
+                    {% if patient.photo %}
+                        <img src="{{ patient.photo.url }}" alt="{{ patient.name }}" class="patient-photo">
+                    {% else %}
+                        <div class="no-photo">No Photo</div>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'patient_detail' patient.id %}">View</a> |
+                    <a href="{% url 'patient_edit' patient.id %}">Edit</a> |
+                    <a href="{% url 'patient_delete' patient.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

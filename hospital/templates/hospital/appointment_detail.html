@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(46,125,50,0.1);
+        }
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #2e7d32;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .card {
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 1.4em;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .card-text {
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn-warning, .btn-danger, .btn-secondary {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Appointment Details</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Appointment for {{ appointment.patient.name }}</h5>
+                <p class="card-text"><strong>Doctor:</strong> Dr. {{ appointment.doctor.name }}</p>
+                <p class="card-text"><strong>Date:</strong> {{ appointment.date }}</p>
+                <p class="card-text"><strong>Time:</strong> {{ appointment.time }}</p>
+                <p class="card-text"><strong>Reason:</strong> {{ appointment.reason }}</p>
+                <a href="{% url 'appointment_edit' appointment.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'appointment_delete' appointment.pk %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

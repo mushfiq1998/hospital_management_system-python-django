@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OT Booking List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #2e7d32;
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+        }
+        .add-booking, .back-to-dashboard {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-to-dashboard {
+            float: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f8e9;
+        }
+        .action-links a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Operation Theatre Booking List</h1>
+    <a href="{% url 'ot_booking_create' %}" class="add-booking">Add OT Booking</a>
+    <a href="{% url 'dashboard' %}" class="back-to-dashboard">Back to Dashboard</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Procedure</th>
+                <th>Scheduled Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.patient.name }}</td>
+                    <td>{{ booking.doctor.name }}</td>
+                    <td>{{ booking.procedure }}</td>
+                    <td>{{ booking.scheduled_time }}</td>
+                    <td>
+                        <span class="status-badge">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="action-links">
+                        <a href="{% url 'ot_booking_detail' booking.pk %}">View</a> |
+                        <a href="{% url 'ot_booking_update' booking.pk %}">Edit</a> |
+                        <a href="{% url 'ot_booking_delete' booking.pk %}">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No OT bookings found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

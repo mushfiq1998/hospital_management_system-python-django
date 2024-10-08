@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 20px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn i {
+            margin-right: 5px;
+        }
+        .btn-back {
+            float: right;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payroll List</h1>
+        <div class="action-buttons">
+            <a href="{% url 'payroll_add' %}" class="btn">
+                <i class="fas fa-plus"></i> Add New Payroll Record
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Salary</th>
+                    <th>Bonus</th>
+                    <th>Deductions</th>
+                    <th>Total Pay</th>
+                    <th>Pay Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payroll in payrolls %}
+                <tr>
+                    <td>{{ payroll.employee.name }}</td>
+                    <td>{{ payroll.salary }} TK</td>
+                    <td>{{ payroll.bonus }} TK</td>
+                    <td>{{ payroll.deductions }} TK</td>
+                    <td>{{ payroll.total_pay }} TK</td>
+                    <td>{{ payroll.pay_date }}</td>
+                    <td>
+                        <a href="{% url 'payroll_view' payroll.id %}" class="btn" style="padding: 5px 10px;">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="{% url 'payroll_edit' payroll.id %}" class="btn" style="padding: 5px 10px;">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'payroll_delete' payroll.id %}" class="btn" style="padding: 5px 10px;">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

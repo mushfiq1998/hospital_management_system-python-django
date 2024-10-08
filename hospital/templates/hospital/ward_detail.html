@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ward Detail - {{ ward.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #2e7d32;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #1b5e20;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f1f8e9;
+        }
+        .edit-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .edit-link:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ ward.name }}</h2>
+        <p>Capacity: {{ ward.capacity }}</p>
+        <h3>Beds</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Occupied</th>
+                    <th>Patient</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bed in beds %}
+                <tr>
+                    <td>{{ bed.number }}</td>
+                    <td>{{ bed.is_occupied|yesno:"Yes,No" }}</td>
+                    <td>{{ bed.patient.name|default:"N/A" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'ward_update' ward.id %}" class="edit-link">Edit Ward</a>
+    </div>
+</body>
+</html>

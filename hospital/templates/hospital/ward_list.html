@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ward List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #2e7d32;
+        }
+        h1 {
+            color: #2e7d32;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f1f8e9;
+        }
+        .add-ward, .back-to-dashboard {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .back-to-dashboard {
+            float: right;
+            background-color: #4CAF50;
+        }
+        .ward-capacity {
+            background-color: #81c784;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .no-photo {
+            width: 50px;
+            height: 50px;
+            background-color: #c8e6c9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 10px;
+        }
+        a {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Ward List</h1>
+    <a class="add-ward" href="{% url 'ward_create' %}">Add Ward</a>
+    <a class="back-to-dashboard" href="{% url 'dashboard' %}">
+        Back to Dashboard
+    </a><br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ward in wards %}
+            <tr>
+                <td>{{ ward.name }}</td>
+                <td><span class="ward-capacity">{{ ward.capacity }} Beds</span></td>
+                <td>
+                    <a href="{% url 'ward_detail' ward.id %}">View</a> |
+                    <a href="{% url 'ward_update' ward.id %}">Edit</a> |
+                    <a href="{% url 'ward_delete' ward.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center;">No wards available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

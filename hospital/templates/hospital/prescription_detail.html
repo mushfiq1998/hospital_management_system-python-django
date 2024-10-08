@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #1b5e20;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-danger {
+            background-color: #f44336;
+        }
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Prescription Detail</h2>
+        <div class="detail-item">
+            <span class="detail-label">Patient:</span> {{ prescription.patient }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Doctor:</span> {{ prescription.doctor }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Diseases:</span> {{ prescription.diseases }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Date Prescribed:</span> {{ prescription.date_prescribed }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Status:</span> {% if prescription.is_filled %}Filled{% else %}Not Filled{% endif %}
+        </div>
+        <h3>Medications</h3>
+        {% for item in prescription.items.all %}
+        <div class="detail-item">
+            <span class="detail-label">Medication:</span> {{ item.medication }}
+            <br>
+            <span class="detail-label">Dosage:</span> {{ item.dosage }}
+            <br>
+            <span class="detail-label">Frequency:</span> {{ item.frequency }}
+        </div>
+        {% endfor %}
+        <div>
+            <a href="{% url 'prescription_update' prescription.pk %}" class="btn">Edit</a>
+            <a href="{% url 'prescription_delete' prescription.pk %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'prescription_list' %}" class="btn">Back to List</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Payroll Record</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .icon-input {
+            position: relative;
+        }
+        .icon-input i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        .icon-input input, .icon-input select {
+            padding-left: 3rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Payroll Record</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.employee.id_for_label }}">Employee</label>
+                <div class="icon-input">
+                    <i class="fas fa-user"></i>
+                    {{ form.employee }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.salary.id_for_label }}">Salary</label>
+                    <div class="icon-input">
+                        <i class="fas fa-dollar-sign"></i>
+                        {{ form.salary }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.bonus.id_for_label }}">Bonus</label>
+                    <div class="icon-input">
+                        <i class="fas fa-gift"></i>
+                        {{ form.bonus }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.deductions.id_for_label }}">Deductions</label>
+                <div class="icon-input">
+                    <i class="fas fa-minus-circle"></i>
+                    {{ form.deductions }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.pay_date.id_for_label }}">Pay Date</label>
+                <div class="icon-input">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ form.pay_date }}
+                </div>
+            </div>
+            <button type="submit">
+                <i class="fas fa-save"></i> Save Payroll Record
+            </button>
+        </form>
+    </div>
+</body>
+</html>

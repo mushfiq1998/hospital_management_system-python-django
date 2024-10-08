@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #1b5e20;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        thead {
+            background-color: #4caf50;
+            color: #ffffff;
+        }
+        tr:nth-child(even) {
+            background-color: #e8f5e9;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn-primary {
+            background-color: #4caf50;
+        }
+        .btn-success {
+            background-color: #66bb6a;
+        }
+        .btn-danger {
+            background-color: #4caf50;
+        }
+        .btn-info {
+            background-color: #4caf50;
+        }
+        .btn-secondary {
+            background-color: #4caf50;
+        }
+        .btn-secondary:hover {
+            background-color: #45a049;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Prescription List</h2>
+        <div class="action-buttons">
+            <a href="{% url 'prescription_create' %}" class="btn">Add New Prescription</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Diseases</th>
+                    <th>Date Prescribed</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions %}
+                <tr>
+                    <td>{{ prescription.patient }}</td>
+                    <td>{{ prescription.doctor }}</td>
+                    <td>{{ prescription.diseases }}</td>
+                    <td>{{ prescription.date_prescribed }}</td>
+                    <td>{% if prescription.is_filled %}Filled{% else %}Not Filled{% endif %}</td>
+                    <td>
+                        <a href="{% url 'prescription_detail' prescription.pk %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'prescription_update' prescription.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{% url 'prescription_delete' prescription.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% if not prescription.is_filled %}
+                        <a href="{% url 'fill_prescription' prescription.pk %}" class="btn btn-sm btn-success">Fill</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 20px;
+            color: #1b5e20;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        thead {
+            background-color: #4caf50;
+            color: #ffffff;
+        }
+        tr:nth-child(even) {
+            background-color: #e8f5e9;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn-primary {
+            background-color: #4caf50;
+        }
+        .btn-danger {
+            background-color: #66bb6a;
+        }
+        .btn-danger:hover {
+            background-color: #43a047;
+        }
+        .btn-info {
+            background-color: #4caf50;
+        }
+        .btn-info:hover {
+            background-color: #45a049;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Medication List</h2>
+        <div class="action-buttons">
+            <a href="{% url 'medication_create' %}" class="btn">Add New Medication</a>
+            <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Purpose</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for medication in medications %}
+                <tr>
+                    <td>{{ medication.name }}</td>
+                    <td>{{ medication.company }}</td>
+                    <td>{{ medication.action|truncatewords:10 }}</td>
+                    <td>{{ medication.price }}</td>
+                    <td>{{ medication.stock }}</td>
+                    <td>
+                        <a href="{% url 'medication_detail' medication.pk %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'medication_update' medication.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{% url 'medication_delete' medication.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

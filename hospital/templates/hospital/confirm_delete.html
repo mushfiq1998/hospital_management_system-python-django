@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Confirmation</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2c2c2c, #4b4b4b);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            color: #333;
+        }
+        .container:hover {
+            transform: scale(1.05);
+        }
+        h1 {
+            color: #2e7d32;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            width: 140px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+            box-shadow: 0 6px 12px rgba(192, 57, 43, 0.4);
+        }
+        .btn-secondary {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        .btn-secondary:hover {
+            background-color: #2980b9;
+            box-shadow: 0 6px 12px rgba(41, 128, 185, 0.4);
+        }
+        /* Optional animation for form */
+        form {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Confirmation</h1>
+        <p>Are you sure you want to delete this {{ object|lower }}?</p>
+        {% if object|lower == 'bed' %}
+            <p>Bed Number: {{ object.number }} in {{ object.ward.name }}</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="actions">
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a href="{{ cancel_url }}" class="btn btn-secondary" style="background-color: #808080;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
