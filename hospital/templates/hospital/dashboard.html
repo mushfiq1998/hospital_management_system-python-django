@@ -283,6 +283,18 @@
                 <a href="{% url 'prescription_list' %}" class="card-link">View Prescriptions</a>
             </div>
 
+            <div class="card">
+                <div class="card-header">Ambulances</div>
+                <div class="card-body">
+                    <div class="card-icon"><i class="fas fa-ambulance"></i></div>
+                    <p>Manage and track hospital ambulances.</p>
+                    <div class="stats">
+                        <span><i class="fas fa-truck-medical"></i> {{ ambulances_count }} Ambulances</span>
+                    </div>
+                </div>
+                <a href="{% url 'ambulance_list' %}" class="card-link">View All Ambulances</a>
+            </div>
+
         </div>
     </div>
 </body>

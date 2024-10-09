@@ -1,5 +1,5 @@
 from django import forms
-from .models import Patient, Employee, Doctor, Appointment, Ward, Bed, OTBooking, Payroll, PatientBilling, Medication, Prescription, PrescriptionItem
+from .models import Patient, Employee, Doctor, Appointment, Ward, Bed, OTBooking, Payroll, PatientBilling, Medication, Prescription, PrescriptionItem, Ambulance, AmbulanceAssignment, Communication
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 
@@ -91,3 +91,21 @@ PrescriptionItemFormSet = inlineformset_factory(
     Prescription, PrescriptionItem, form=PrescriptionItemForm,
     extra=1, can_delete=True
 )
+
+class AmbulanceForm(forms.ModelForm):
+    class Meta:
+        model = Ambulance
+        fields = ['vehicle_number', 'model', 'capacity', 'status', 'last_maintenance', 'photo']
+        widgets = {
+            'last_maintenance': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class AmbulanceAssignmentForm(forms.ModelForm):
+    class Meta:
+        model = AmbulanceAssignment
+        fields = ['ambulance', 'patient', 'notes']
+
+class CommunicationForm(forms.ModelForm):
+    class Meta:
+        model = Communication
+        fields = ['message']

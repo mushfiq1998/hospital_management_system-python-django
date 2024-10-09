@@ -106,5 +106,13 @@ urlpatterns = [
     path('prescriptions/<int:pk>/delete/', views.PrescriptionDeleteView.as_view(), 
          name='prescription_delete'),
 
-    # ... (rest of the existing url patterns)
+    # Ambulance Management URLs
+    path('ambulances/', views.AmbulanceListView.as_view(), name='ambulance_list'),
+    path('ambulances/<int:pk>/', views.AmbulanceDetailView.as_view(), name='ambulance_detail'),
+    path('ambulances/create/', views.AmbulanceCreateView.as_view(), name='ambulance_create'),
+    path('ambulances/<int:pk>/update/', views.AmbulanceUpdateView.as_view(), name='ambulance_update'),
+    path('ambulances/<int:pk>/delete/', views.AmbulanceDeleteView.as_view(), name='ambulance_delete'),
+    
+    path('assign-ambulance/', views.assign_ambulance, name='assign_ambulance'),
+    path('assignment/<int:pk>/', views.assignment_detail, name='assignment_detail'),
 ]

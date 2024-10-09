@@ -161,11 +161,66 @@ class Prescription(models.Model):
 
 
 class PrescriptionItem(models.Model):
-    prescription = models.ForeignKey(Prescription, related_name='items', on_delete=models.CASCADE)
+    prescription = models.ForeignKey(Prescription, related_name='items', 
+                                     on_delete=models.CASCADE)
     medication = models.ForeignKey('Medication', on_delete=models.CASCADE)
     dosage = models.CharField(max_length=100)
     frequency = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.prescription} - {self.medication}"
+
+
+class Ambulance(models.Model):
+    vehicle_number = models.CharField(max_length=20, unique=True)
+    model = models.CharField(max_length=100)
+    capacity = models.PositiveIntegerField()
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('on_call', 'On Call'),
+        ('maintenance', 'Under Maintenance'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, 
+                              default='available')
+    last_maintenance = models.DateField(null=True, blank=True)
+    photo = models.ImageField(upload_to='ambulance_photos/', 
+                              null=True, blank=True) 
+
+    def __str__(self):
+        return f"Ambulance {self.vehicle_number}"
+
+
+class AmbulanceAssignment(models.Model):
+    ASSIGNMENT_STATUS_CHOICES = [
+        ('assigned', 'Assigned'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    ]
+    ambulance = models.ForeignKey(Ambulance, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    assigned_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=ASSIGNMENT_STATUS_CHOICES, 
+                              default='assigned')
+
+    def __str__(self):
+        return f"Ambulance {self.ambulance.vehicle_number} assigned to {self.patient.name}"
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # New assignment
+            self.ambulance.status = 'on_call'
+            self.ambulance.save()
+        super().save(*args, **kwargs)
+
+
+class Communication(models.Model):
+    assignment = models.ForeignKey(AmbulanceAssignment, 
+                    on_delete=models.CASCADE, related_name='communications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Communication for {self.assignment} at {self.timestamp}"
 

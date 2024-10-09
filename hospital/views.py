@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Patient, Employee, Doctor, Appointment, Ward, Bed,\
-      OTBooking, Payroll, PatientBilling, Medication, Prescription
+      OTBooking, Payroll, PatientBilling, Medication, Prescription, Ambulance, AmbulanceAssignment, Communication
 from .forms import PatientForm, EmployeeForm, DoctorForm, AppointmentForm, \
-WardForm, BedForm, OTBookingForm, PatientBillingForm, MedicationForm, PrescriptionForm
+WardForm, BedForm, OTBookingForm, PatientBillingForm, MedicationForm, PrescriptionForm, AmbulanceForm, AmbulanceAssignmentForm, CommunicationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -35,14 +35,15 @@ def dashboard(request):
     wards_count = Ward.objects.count()
     beds_count = Bed.objects.count()
     patients = Patient.objects.all()
-    # Add OT booking information
     upcoming_ot_bookings = OTBooking.objects.filter(status='scheduled', scheduled_time__gt=timezone.now()).count()
     ongoing_ot_bookings = OTBooking.objects.filter(status='in_progress').count()
     payroll_count = Payroll.objects.count()
     
-    # Add billing information
     total_billing = PatientBilling.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
     unpaid_billing = PatientBilling.objects.filter(payment_status='unpaid').aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+    
+    # Add this line to get the total number of ambulances
+    ambulances_count = Ambulance.objects.count()
     
     context = {
         'employees_count': employees_count,
@@ -59,6 +60,7 @@ def dashboard(request):
         'payroll_count': payroll_count,
         'total_billing': total_billing,
         'unpaid_billing': unpaid_billing,
+        'ambulances_count': ambulances_count,  # Add this line
     }
     return render(request, 'hospital/dashboard.html', context)
 
@@ -731,3 +733,82 @@ def fill_prescription(request, pk):
         prescription.is_filled = True
         prescription.save()
     return redirect('prescription_list')
+
+class AmbulanceListView(ListView):
+    model = Ambulance
+    template_name = 'hospital/ambulance_list.html'
+    context_object_name = 'ambulances'
+
+class AmbulanceDetailView(DetailView):
+    model = Ambulance
+    template_name = 'hospital/ambulance_detail.html'
+    context_object_name = 'ambulance'
+
+class AmbulanceCreateView(CreateView):
+    model = Ambulance
+    form_class = AmbulanceForm
+    template_name = 'hospital/ambulance_form.html'
+    success_url = reverse_lazy('ambulance_list')
+
+class AmbulanceUpdateView(UpdateView):
+    model = Ambulance
+    form_class = AmbulanceForm
+    template_name = 'hospital/ambulance_form.html'
+    success_url = reverse_lazy('ambulance_list')
+
+class AmbulanceDeleteView(DeleteView):
+    model = Ambulance
+    template_name = 'hospital/ambulance_confirm_delete.html'
+    success_url = reverse_lazy('ambulance_list')
+
+@login_required
+def assign_ambulance(request):
+    ambulance_id = request.GET.get('ambulance_id')
+    initial_data = {}
+    if ambulance_id:
+        ambulance = get_object_or_404(Ambulance, id=ambulance_id)
+        initial_data['ambulance'] = ambulance
+
+    if request.method == 'POST':
+        form = AmbulanceAssignmentForm(request.POST, initial=initial_data)
+        if form.is_valid():
+            assignment = form.save(commit=False)
+            assignment.status = 'assigned'
+            assignment.save()
+            messages.success(request, 'Ambulance assigned successfully.')
+            return redirect('assignment_detail', pk=assignment.pk)
+    else:
+        form = AmbulanceAssignmentForm(initial=initial_data)
+    return render(request, 'hospital/assign_ambulance.html', {'form': form})
+
+@login_required
+def assignment_detail(request, pk):
+    assignment = get_object_or_404(AmbulanceAssignment, pk=pk)
+    communications = assignment.communications.all().order_by('-timestamp')
+    
+    if request.method == 'POST':
+        if 'complete_assignment' in request.POST:
+            assignment.status = 'completed'
+            assignment.completed_at = timezone.now()
+            assignment.ambulance.status = 'available'
+            assignment.ambulance.save()
+            assignment.save()
+            messages.success(request, 'Assignment marked as completed.')
+            return redirect('assignment_detail', pk=pk)
+        else:
+            form = CommunicationForm(request.POST)
+            if form.is_valid():
+                communication = form.save(commit=False)
+                communication.assignment = assignment
+                communication.sender = request.user
+                communication.save()
+                return redirect('assignment_detail', pk=pk)
+    else:
+        form = CommunicationForm()
+    
+    context = {
+        'assignment': assignment,
+        'communications': communications,
+        'form': form,
+    }
+    return render(request, 'hospital/assignment_detail.html', context)
