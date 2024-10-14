@@ -22,6 +22,10 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, DeleteView
 from .models import Prescription, PrescriptionItem
 from .forms import PrescriptionForm, PrescriptionItemFormSet
+from .models import PatientSerial
+from .forms import PatientSerialForm
+from django.db import IntegrityError
+from django.db.models import Max
 
 # Dashboard View
 @login_required
@@ -45,6 +49,10 @@ def dashboard(request):
     # Add this line to get the total number of ambulances
     ambulances_count = Ambulance.objects.count()
     
+    # Add this to get today's patient serials count
+    today = timezone.now().date()
+    patient_serials_count = PatientSerial.objects.filter(date=today).count()
+    
     context = {
         'employees_count': employees_count,
         'patients_count': patients_count,
@@ -61,6 +69,7 @@ def dashboard(request):
         'total_billing': total_billing,
         'unpaid_billing': unpaid_billing,
         'ambulances_count': ambulances_count,  # Add this line
+        'patient_serials_count': patient_serials_count,
     }
     return render(request, 'hospital/dashboard.html', context)
 
@@ -812,3 +821,85 @@ def assignment_detail(request, pk):
         'form': form,
     }
     return render(request, 'hospital/assignment_detail.html', context)
+
+@login_required
+def patient_serial_list(request):
+    today = timezone.now().date()
+    serials = PatientSerial.objects.filter(date=today)
+    return render(request, 'hospital/patient_serial_list.html', {'serials': serials})
+
+@login_required
+def create_patient_serial(request):
+    if request.method == 'POST':
+        form = PatientSerialForm(request.POST)
+        if form.is_valid():
+            serial = form.save(commit=False)
+            
+            # Check if a serial with the same doctor, date, and serial number already exists
+            existing_serial = PatientSerial.objects.filter(
+                doctor=serial.doctor,
+                date=serial.date,
+                serial_number=serial.serial_number
+            ).exists()
+            
+            if existing_serial:
+                messages.error(request, 'A serial with this number already exists for the selected doctor and date.')
+            else:
+                serial.save()
+                messages.success(request, 'Patient serial created successfully.')
+                return redirect('patient_serial_list')
+    else:
+        form = PatientSerialForm(initial={'date': timezone.now().date()})
+    
+    context = {
+        'form': form,
+        'patients': Patient.objects.all(),
+        'doctors': Doctor.objects.all(),
+        'status_choices': PatientSerial.STATUS_CHOICES,
+    }
+    return render(request, 'hospital/patient_serial_form.html', context)
+
+@login_required
+def update_patient_serial_status(request, pk):
+    serial = get_object_or_404(PatientSerial, pk=pk)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in dict(PatientSerial.status_choices):
+            serial.status = new_status
+            serial.save()
+            messages.success(request, f'Serial status updated to {new_status}.')
+        else:
+            messages.error(request, 'Invalid status.')
+    return redirect('patient_serial_list')
+
+def patient_serial_detail(request, pk):
+    serial = get_object_or_404(PatientSerial, pk=pk)
+    patients = Patient.objects.all()
+    doctors = Doctor.objects.all()
+    status_choices = PatientSerial.STATUS_CHOICES
+
+    context = {
+        'serial': serial,
+        'patients': patients,
+        'doctors': doctors,
+        'status_choices': status_choices,
+    }
+    return render(request, 'hospital/patient_serial_detail.html', context)
+
+def edit_patient_serial(request, pk):
+    serial = get_object_or_404(PatientSerial, pk=pk)
+    if request.method == 'POST':
+        form = PatientSerialForm(request.POST, instance=serial)
+        if form.is_valid():
+            form.save()
+            return redirect('patient_serial_list')
+    else:
+        form = PatientSerialForm(instance=serial)
+    return render(request, 'hospital/patient_serial_form.html', {'form': form})
+
+def delete_patient_serial(request, pk):
+    serial = get_object_or_404(PatientSerial, pk=pk)
+    if request.method == 'POST':
+        serial.delete()
+        return redirect('patient_serial_list')
+    return render(request, 'hospital/patient_serial_confirm_delete.html', {'serial': serial})

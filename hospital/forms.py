@@ -1,5 +1,5 @@
 from django import forms
-from .models import Patient, Employee, Doctor, Appointment, Ward, Bed, OTBooking, Payroll, PatientBilling, Medication, Prescription, PrescriptionItem, Ambulance, AmbulanceAssignment, Communication
+from .models import Patient, Employee, Doctor, Appointment, Ward, Bed, OTBooking, Payroll, PatientBilling, Medication, Prescription, PrescriptionItem, Ambulance, AmbulanceAssignment, Communication, PatientSerial
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 
@@ -109,3 +109,15 @@ class CommunicationForm(forms.ModelForm):
     class Meta:
         model = Communication
         fields = ['message']
+
+class PatientSerialForm(forms.ModelForm):
+    class Meta:
+        model = PatientSerial
+        fields = ['patient', 'doctor', 'date', 'serial_number', 'status']
+        widgets = {
+            'patient': forms.Select(attrs={'class': 'form-select'}),
+            'doctor': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'serial_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        }

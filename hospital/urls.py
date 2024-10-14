@@ -115,4 +115,16 @@ urlpatterns = [
     
     path('assign-ambulance/', views.assign_ambulance, name='assign_ambulance'),
     path('assignment/<int:pk>/', views.assignment_detail, name='assignment_detail'),
+
+    # Patient Serial URLs
+    path('patient-serials/', views.patient_serial_list, name='patient_serial_list'),
+    path('patient-serials/create/', views.create_patient_serial, name='create_patient_serial'),
+    path('patient-serials/<int:pk>/', views.patient_serial_detail, name='patient_serial_detail'),
+    path('patient-serials/<int:pk>/edit/', views.edit_patient_serial, name='edit_patient_serial'),
+    path('patient-serials/<int:pk>/delete/', views.delete_patient_serial, name='delete_patient_serial'),
+    path('patient-serials/<int:pk>/update-status/', views.update_patient_serial_status, name='update_patient_serial_status'),
+    path('create-patient-serial/', views.create_patient_serial, name='create_patient_serial'),
+    path('patient-serial/<int:pk>/', views.patient_serial_detail, name='patient_serial_detail'),
+
+    # ... (other URL patterns)
 ]

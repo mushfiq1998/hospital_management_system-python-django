@@ -224,3 +224,37 @@ class Communication(models.Model):
     def __str__(self):
         return f"Communication for {self.assignment} at {self.timestamp}"
 
+
+class PatientSerial(models.Model):
+    STATUS_CHOICES = [
+        ('waiting', 'Waiting'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    patient = models.ForeignKey('Patient', on_delete=models.CASCADE,
+                                blank=True, null=True)
+    doctor = models.ForeignKey('Doctor', on_delete=models.CASCADE,
+                                blank=True, null=True)
+    date = models.DateField(default=timezone.now)
+    serial_number = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, 
+                              default='waiting')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'serial_number']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['doctor', 'date', 'serial_number'],
+                name='unique_doctor_date_serial'
+            )
+        ]
+
+    def __str__(self):
+        return f"Serial {self.serial_number} - {self.patient.name} - Dr. {self.doctor.name}"
+
+    @property
+    def get_status_display(self):
+        return dict(self.STATUS_CHOICES)[self.status]
