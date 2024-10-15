@@ -12,9 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Add this near the top of the file, after the other imports
+FROZEN_IMPORTLIB_BOOTSTRAP = getattr(sys, '_MEIPASS', None)
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bok!dz39ziha((ea&2i8+8n2e(&03@#7i%6m8&z^kq0$^kqp8^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'hospital',
+    'xhtml2pdf',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +131,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Add this at the end of the file
+if FROZEN_IMPORTLIB_BOOTSTRAP:
+    AUTORELOAD_PATHS = [
+        path for path in sys.path
+        if not path.startswith(FROZEN_IMPORTLIB_BOOTSTRAP)
+    ]
+else:
+    AUTORELOAD_PATHS = sys.path

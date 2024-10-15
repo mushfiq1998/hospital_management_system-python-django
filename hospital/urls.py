@@ -38,7 +38,8 @@ urlpatterns = [
     path('appointments/<int:pk>/', views.appointment_detail, name='appointment_detail'),
     path('appointments/<int:pk>/edit/', views.appointment_edit, name='appointment_edit'),
     path('appointments/<int:pk>/delete/', views.appointment_delete, name='appointment_delete'),
-
+    path('appointments/<int:appointment_id>/pdf/', views.appointment_pdf, name='appointment_pdf'),
+    
     # Ward URLs
     path('wards/', views.ward_list, name='ward_list'),
     path('wards/<int:pk>/', views.ward_detail, name='ward_detail'),

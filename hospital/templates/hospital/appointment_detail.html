@@ -55,7 +55,7 @@
             font-weight: bold;
             transition: background-color 0.3s ease;
         }
-        .btn-warning, .btn-danger, .btn-secondary {
+        .btn-warning, .btn-danger, .btn-secondary, .btn-print {
             background-color: #4CAF50;
             color: #fff;
         }
@@ -74,6 +74,9 @@
                 <p class="card-text"><strong>Date:</strong> {{ appointment.date }}</p>
                 <p class="card-text"><strong>Time:</strong> {{ appointment.time }}</p>
                 <p class="card-text"><strong>Reason:</strong> {{ appointment.reason }}</p>
+                <a href="{% url 'appointment_pdf' appointment.id %}" 
+                    class="btn btn-print" target="_blank">Print PDF
+                </a>
                 <a href="{% url 'appointment_edit' appointment.pk %}" class="btn btn-warning">Edit</a>
                 <a href="{% url 'appointment_delete' appointment.pk %}" class="btn btn-danger">Delete</a>
                 <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Back to List</a>

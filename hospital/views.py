@@ -8,7 +8,6 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, CreateView, UpdateView, DetailView
 from django.utils import timezone
@@ -26,6 +25,11 @@ from .models import PatientSerial
 from .forms import PatientSerialForm
 from django.db import IntegrityError
 from django.db.models import Max
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
+from .models import Appointment
 
 # Dashboard View
 @login_required
@@ -365,6 +369,21 @@ def appointment_edit(request, pk):
 def appointment_delete(request, pk):
     return delete_object(request, Appointment, pk, 'appointment_list')
 
+def appointment_pdf(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    template_path = 'hospital/appointment_pdf.html'
+    context = {'appointment': appointment}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="appointment_{appointment_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 # ......................................................................
 # Ward Views ..........................................................
