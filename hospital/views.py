@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .models import Patient, Employee, Doctor, Appointment, Ward, Bed,\
       OTBooking, Payroll, PatientBilling, Medication, Prescription, Ambulance, AmbulanceAssignment, Communication
 from .forms import PatientForm, EmployeeForm, DoctorForm, AppointmentForm, \
@@ -8,7 +8,6 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, CreateView, UpdateView, DetailView
 from django.utils import timezone
 from django.contrib.auth.forms import PasswordChangeForm
@@ -17,8 +16,6 @@ from django.contrib.auth.models import User
 from .forms import UserProfileForm
 from .forms import PayrollForm
 from django.db.models import Sum
-from django.urls import reverse_lazy
-from django.views.generic import DetailView, DeleteView
 from .models import Prescription, PrescriptionItem
 from .forms import PrescriptionForm, PrescriptionItemFormSet
 from .models import PatientSerial
@@ -273,7 +270,23 @@ def employee_create(request):
     else:
         form = EmployeeForm()
     return render(request, 'hospital/employee_form.html', {'form': form})
+    
 
+def employee_pdf(request, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+    template_path = 'hospital/employee_pdf.html'
+    context = {'employee': employee}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="employee_{employee_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 # .......................................................................
 # Doctor Views ..........................................................

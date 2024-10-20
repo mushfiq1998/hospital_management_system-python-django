@@ -19,11 +19,18 @@ urlpatterns = [
     path('patients/<int:pk>/admit/', views.admit_patient, name='admit_patient'),
 
     # Employee URLs
-    path('employees/', views.employee_list, name='employee_list'),
-    path('employees/add/', views.employee_add, name='employee_add'),
-    path('employees/<int:pk>/', views.employee_detail, name='employee_detail'),
-    path('employees/<int:pk>/edit/', views.employee_edit, name='employee_edit'),
-    path('employees/<int:pk>/delete/', views.employee_delete, name='employee_delete'),
+    path('employees/', views.employee_list, 
+         name='employee_list'),
+    path('employees/add/', views.employee_add,
+          name='employee_add'),
+    path('employees/<int:pk>/', views.employee_detail, 
+         name='employee_detail'),
+    path('employees/<int:pk>/edit/', views.employee_edit, 
+         name='employee_edit'),
+    path('employees/<int:pk>/delete/', views.employee_delete, 
+         name='employee_delete'),
+    path('employees/<int:employee_id>/pdf/', views.employee_pdf, 
+         name='employee_pdf'),
 
     # Doctor URLs
     path('doctors/', views.doctor_list, name='doctor_list'),
@@ -33,12 +40,18 @@ urlpatterns = [
     path('doctors/<int:pk>/delete/', views.doctor_delete, name='doctor_delete'),
 
     # Appointment URLs
-    path('appointments/', views.appointment_list, name='appointment_list'),
-    path('appointments/add/', views.appointment_add, name='appointment_add'),
-    path('appointments/<int:pk>/', views.appointment_detail, name='appointment_detail'),
-    path('appointments/<int:pk>/edit/', views.appointment_edit, name='appointment_edit'),
-    path('appointments/<int:pk>/delete/', views.appointment_delete, name='appointment_delete'),
-    path('appointments/<int:appointment_id>/pdf/', views.appointment_pdf, name='appointment_pdf'),
+    path('appointments/', views.appointment_list, 
+         name='appointment_list'),
+    path('appointments/add/', views.appointment_add, 
+         name='appointment_add'),
+    path('appointments/<int:pk>/', views.appointment_detail,
+          name='appointment_detail'),
+    path('appointments/<int:pk>/edit/', views.appointment_edit, 
+         name='appointment_edit'),
+    path('appointments/<int:pk>/delete/', views.appointment_delete, 
+         name='appointment_delete'),
+    path('appointments/<int:appointment_id>/pdf/', views.appointment_pdf, 
+         name='appointment_pdf'),
     
     # Ward URLs
     path('wards/', views.ward_list, name='ward_list'),

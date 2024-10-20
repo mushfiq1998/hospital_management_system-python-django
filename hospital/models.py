@@ -10,6 +10,7 @@ class Employee(models.Model):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     photo = models.ImageField(upload_to='employee_photos/', null=True, blank=True)
+    joining_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} - {self.position}"

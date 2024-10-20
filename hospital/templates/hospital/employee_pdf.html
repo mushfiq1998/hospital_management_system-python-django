@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Employee Profile</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+                color: #333;
+                line-height: 1.6;
+                margin: 0;
+                padding: 40px 0;
+                font-size: 16px;
+            }
+            .wrapper {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: rgba(255, 255, 255, 0.9);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+                border-radius: 20px;
+                overflow: hidden;
+            }
+            .header {
+                background: linear-gradient(to right, #27ae60, #2ecc71);
+                padding: 30px;
+                text-align: center;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+            }
+            .title {
+                color: #ffffff;
+                font-size: 36px;
+                font-weight: 600;
+                margin: 0;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+            .photo {
+                text-align: center;
+                margin: 70px 0 30px;
+            }
+            .employee-photo {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                border: 5px solid #ffffff;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                object-fit: cover;
+            }
+            .details {
+                padding: 30px;
+            }
+            .info-group {
+                margin-bottom: 20px;
+                padding: 15px;
+                background-color: #f0fff0;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+            .label {
+                font-weight: 600;
+                color: #27ae60;
+                min-width: 120px;
+                display: inline-block;
+            }
+            p {
+                margin: 10px 0;
+                font-size: 16px;
+            }
+            .footer {
+                text-align: center;
+                padding: 20px;
+                background-color: #e8f6e8;
+                color: #27ae60;
+                font-size: 14px;
+            }
+            .section-title {
+                color: #27ae60;
+                font-size: 24px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='header'>
+            <h1 class='title'>Employee Profile</h1>
+        </div>
+        <div class='wrapper'>
+            <div class='photo'>
+                {% if employee.photo %}
+                    <img src="{{ employee.photo.path }}" alt="{{ employee.name }}" class="employee-photo">
+                {% else %}
+                    <div class="employee-photo" style="background-color: #e8f6e8; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 48px; color: #27ae60;">{{ employee.name|make_list|first|upper }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class='details'>
+                <h2 class='section-title'>Employee Details</h2>
+                <div class='info-group'>
+                    <p><span class="label">Name:</span> {{ employee.name }}</p>
+                    <p><span class="label">Employee ID:</span> {{ employee.employee_id }}</p>
+                </div>
+                <div class='info-group'>
+                    <p><span class="label">Position:</span> {{ employee.position }}</p>
+                    <p><span class="label">Department:</span> {{ employee.department }}</p>
+                </div>
+                <div class='info-group'>
+                    <p><span class="label">Contact:</span> {{ employee.phone_number }}</p>
+                    <p><span class="label">Email:</span> {{ employee.email }}</p>
+                </div>
+            </div>
+            <div class='footer'>
+                Generated on {% now "F j, Y" %}
+            </div>
+        </div>
+    </body>
+</html>

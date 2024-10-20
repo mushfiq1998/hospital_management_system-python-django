@@ -11,7 +11,7 @@
             <p class="employee-position">{{ employee.position }}</p>
         </div>
         <div class="employee-photo-container">
-            {% if employee.photo %}
+            {% if employee.photo %} 
                 <img src="{{ employee.photo.url }}" alt="{{ employee.full_name }}" class="employee-photo">
             {% else %}
                 <div class="no-photo">
@@ -34,9 +34,18 @@
             </div>
         </div>
         <div class="button-container">
-            <a href="{% url 'employee_edit' employee.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
-            <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
-            <a href="{% url 'employee_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+            <a href="{% url 'employee_edit' employee.pk %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Delete
+            </a>
+            <a href="{% url 'employee_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+            <a href="{% url 'employee_pdf' employee.pk %}" class="btn btn-info">
+                <i class="fas fa-file-pdf"></i> Print PDF
+            </a>
         </div>
     </div>
 </div>
@@ -44,13 +53,19 @@
 
 {% block extra_css %}
 <style>
+    body {
+        background-color: #e8f5e9;
+        font-family: 'Arial', sans-serif;
+    }
+
     .employee-detail-container {
         max-width: 700px;
         margin: 2.5rem auto;
         padding: 2rem;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-left: 10px solid #4caf50;
     }
 
     .employee-card {
@@ -59,14 +74,15 @@
     }
 
     .employee-header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         margin-bottom: 0.5rem;
-        color: #2c5e2c;
+        color: #388e3c;
+        text-transform: uppercase;
     }
 
     .employee-position {
-        font-size: 1.2rem;
-        color: #4caf50;
+        font-size: 1.3rem;
+        color: #66bb6a;
     }
 
     .employee-photo-container {
@@ -78,8 +94,8 @@
         height: 180px;
         border-radius: 50%;
         object-fit: cover;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        border: 4px solid #d4edda;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border: 4px solid #a5d6a7;
     }
 
     .no-photo {
@@ -87,70 +103,104 @@
         justify-content: center;
         align-items: center;
         font-size: 6rem;
-        background-color: #e0f7fa;
+        background-color: #c8e6c9;
         color: #4caf50;
     }
 
     .employee-info {
         margin-bottom: 2rem;
+        padding: 0 1rem;
     }
 
     .info-item {
-        font-size: 1rem;
+        font-size: 1.1rem;
         margin-bottom: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
         color: #333;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0.5rem;
     }
 
     .info-item i {
-        color: #4caf50;
+        color: #66bb6a;
         margin-right: 10px;
+        font-size: 1.2rem;
     }
 
     .button-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
-    .btn {
-        padding: 10px 20px;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 30px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
+    /* Button styling with more specificity */
+    .button-container .btn {
+        padding: 12px 24px !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        border-radius: 30px !important;
+        text-transform: uppercase !important;
+        transition: all 0.3s ease !important;
+        border: none !important;
+        color: #fff !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+        position: relative !important;
+        overflow: hidden !important;
     }
 
-    .btn-primary {
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
+    .button-container .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: all 0.5s;
     }
 
-    .btn-primary:hover {
-        background-color: #43a047;
+    .button-container .btn:hover::before {
+        left: 100%;
     }
 
-    .btn-danger {
-        background-color: #e53935;
-        color: #fff;
-        border: none;
+    /* Specific button color styles */
+    .button-container .btn-primary {
+        background-color: #388e3c !important;
     }
 
-    .btn-danger:hover {
-        background-color: #d32f2f;
+    .button-container .btn-primary:hover {
+        background-color: #2e7d32 !important;
     }
 
-    .btn-secondary {
-        background-color: #66bb6a;
-        color: #fff;
-        border: none;
+    .button-container .btn-danger {
+        background-color: #e53935 !important;
     }
 
-    .btn-secondary:hover {
-        background-color: #4caf50;
+    .button-container .btn-danger:hover {
+        background-color: #d32f2f !important;
+    }
+
+    .button-container .btn-secondary {
+        background-color: #81c784 !important;
+    }
+
+    .button-container .btn-secondary:hover {
+        background-color: #66bb6a !important;
+    }
+
+    .button-container .btn-info {
+        background-color: #0288d1 !important;
+    }
+
+    .button-container .btn-info:hover {
+        background-color: #0277bd !important;
+    }
+
+    .button-container .btn i {
+        margin-right: 8px !important;
     }
 </style>
 {% endblock %}
