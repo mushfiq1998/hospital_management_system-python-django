@@ -40,13 +40,14 @@
                 <!-- Add more details as needed -->
             </div>
             <div class="button-container">
-                <a href="{% url 'employee_pdf' employee.id %}" class="btn btn-primary" target="_blank">
+                <a href="{% url 'employee_pdf' employee.id %}" class="print-link" target="_blank">
                     <i class="fas fa-file-pdf"></i> Print PDF
                 </a>
-                <a href="{% url 'employee_edit' employee.id %}" class="btn btn-secondary">
+                <a href="{% url 'employee_edit' employee.id %}" class="edit-link">
                     <i class="fas fa-user-edit"></i> Edit
                 </a>
-                <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee? This action cannot be undone.');">
+                <a href="{% url 'employee_delete' employee.id %}" 
+                    class="delete-link" onclick="return confirm('Are you sure you want to delete this employee? This action cannot be undone.');">
                     <i class="fas fa-user-minus"></i>Delete
                 </a>
             </div>
@@ -60,6 +61,44 @@
     body {
         background-color: #e8f5e9;
         font-family: 'Arial', sans-serif;
+    }
+    .print-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .print-link:hover {
+        background-color: #388e3c;
+    }
+
+    .edit-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+    .edit-link:hover {
+        background-color: #388e3c;
+    }
+
+    .delete-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+    .delete-link:hover {
+        background-color: #388e3c;
     }
 
     .employee-detail-container {

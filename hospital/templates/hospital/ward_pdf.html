@@ -11,6 +11,7 @@
             margin: 0;
             padding: 20px;
             color: #2e7d32;
+            font-size: 16px;  /* Increased base font size */
         }
         .container {
             max-width: 800px;
@@ -23,14 +24,17 @@
         h2 {
             color: #2e7d32;
             margin-bottom: 10px;
+            font-size: 28px;  /* Increased font size for h2 */
         }
         p {
             margin-bottom: 20px;
+            font-size: 18px;  /* Increased font size for paragraphs */
         }
         h3 {
             color: #1b5e20;
             margin-top: 30px;
             margin-bottom: 15px;
+            font-size: 24px;  /* Increased font size for h3 */
         }
         table {
             width: 100%;
@@ -41,39 +45,16 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #c8e6c9;
+            font-size: 16px;  /* Increased font size for table cells */
         }
         th {
             background-color: #4caf50;
             color: white;
             font-weight: bold;
+            font-size: 18px;  /* Increased font size for table headers */
         }
         tr:hover {
             background-color: #f1f8e9;
-        }
-        .edit-link {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .edit-link:hover {
-            background-color: #388e3c;
-        }
-
-        .print-link {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .print-link:hover {
-            background-color: #388e3c;
         }
     </style>
 </head>
@@ -100,11 +81,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'ward_update' ward.id %}" class="edit-link">Edit Ward</a>
-        <a href="{% url 'ward_pdf' ward.id %}" 
-            class="print-link" target="_blank">
-            <i class="fas fa-file-pdf"></i> Print PDF
-        </a>
     </div>
 </body>
 </html>

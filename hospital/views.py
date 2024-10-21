@@ -466,6 +466,25 @@ def ward_update(request, pk):
     else:
         form = WardForm(instance=ward)
     return render(request, 'hospital/ward_form.html', {'form': form})
+    
+
+def ward_pdf(request, ward_id):
+    ward = get_object_or_404(Ward, id=ward_id)
+    beds = ward.beds.all()
+    template_path = 'hospital/ward_pdf.html'
+    context = {'ward': ward, 'beds': beds}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="ward_{ward_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 
 # Bed Views
 @login_required
@@ -536,6 +555,24 @@ ward_delete = WardDeleteView.as_view()
 def bed_delete(request, pk):
     return delete_object(request, Bed, pk, 'bed_list')
 
+
+def bed_pdf(request, bed_id):
+    bed = get_object_or_404(Bed, id=bed_id)
+    template_path = 'hospital/bed_pdf.html'
+    context = {'bed': bed}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="bed_{bed_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
 @login_required
 def ot_booking_list(request):
     bookings = OTBooking.objects.all().order_by('scheduled_time')
@@ -579,6 +616,24 @@ def ot_booking_delete(request, pk):
 def ot_booking_detail(request, pk):
     booking = get_object_or_404(OTBooking, pk=pk)
     return render(request, 'hospital/ot_booking_detail.html', {'booking': booking})
+
+
+def ot_booking_pdf(request, booking_id):
+    booking = get_object_or_404(OTBooking, id=booking_id)
+    template_path = 'hospital/ot_booking_pdf.html'
+    context = {'booking': booking}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="ot_booking_{booking_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 
 @login_required
 def change_password(request):
@@ -660,6 +715,24 @@ def payroll_delete(request, pk):
         messages.success(request, 'Payroll record deleted successfully.')
         return redirect('payroll_list')
     return render(request, 'hospital/payroll_confirm_delete.html', {'payroll': payroll})
+
+
+def payroll_pdf(request, payroll_id):
+    payroll = get_object_or_404(Payroll, id=payroll_id)
+    template_path = 'hospital/payroll_pdf.html'
+    context = {'payroll': payroll}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="payroll_{payroll_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 
 # Add these new views for patient billing
 @login_required

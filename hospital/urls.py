@@ -63,21 +63,31 @@ urlpatterns = [
     path('wards/create/', views.ward_create, name='ward_create'),
     path('wards/<int:pk>/update/', views.ward_update, name='ward_update'),
     path('wards/<int:pk>/delete/', views.ward_delete, name='ward_delete'),
+    path('wards/<int:ward_id>/pdf/', views.ward_pdf, 
+         name='ward_pdf'),
 
     # Bed URLs
     path('beds/', views.bed_list, name='bed_list'),
     path('beds/<int:pk>/', views.bed_detail, name='bed_detail'),
     path('beds/create/', views.bed_create, name='bed_create'),
     path('beds/<int:pk>/update/', views.bed_update, name='bed_update'),
-    path('patients/<int:patient_id>/assign_bed/', views.assign_bed, name='assign_bed'),
+    path('patients/<int:patient_id>/assign_bed/', views.assign_bed, 
+         name='assign_bed'),
     path('beds/<int:pk>/delete/', views.bed_delete, name='bed_delete'),
+    path('beds/<int:bed_id>/pdf/', views.bed_pdf, name='bed_pdf'),
+
 
     # OT Booking URLs
     path('ot-bookings/', views.ot_booking_list, name='ot_booking_list'),
     path('ot-bookings/create/', views.ot_booking_create, name='ot_booking_create'),
-    path('ot-bookings/<int:pk>/update/', views.ot_booking_update, name='ot_booking_update'),
-    path('ot-bookings/<int:pk>/delete/', views.ot_booking_delete, name='ot_booking_delete'),
-    path('ot-bookings/<int:pk>/', views.ot_booking_detail, name='ot_booking_detail'),
+    path('ot-bookings/<int:pk>/update/', views.ot_booking_update, 
+         name='ot_booking_update'),
+    path('ot-bookings/<int:pk>/delete/', views.ot_booking_delete, 
+         name='ot_booking_delete'),
+    path('ot-bookings/<int:pk>/', views.ot_booking_detail, 
+         name='ot_booking_detail'),
+    path('ot-bookings/<int:booking_id>/pdf/', views.ot_booking_pdf, 
+         name='ot_booking_pdf'),
 
     # Account Management URLs
     path('account/', views.account_management, name='account_management'),
@@ -91,6 +101,7 @@ urlpatterns = [
     path('payroll/<int:pk>/edit/', views.payroll_edit, name='payroll_edit'),
     path('payroll/<int:pk>/', views.payroll_view, name='payroll_view'),
     path('payroll/<int:pk>/delete/', views.payroll_delete, name='payroll_delete'),
+    path('payroll/<int:payroll_id>/pdf/', views.payroll_pdf, name='payroll_pdf'),
 
     # Patient Billing URLs
     path('patient-billing/', views.patient_billing_list, name='patient_billing_list'),

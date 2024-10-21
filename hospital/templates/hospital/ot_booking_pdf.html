@@ -12,10 +12,12 @@
             margin: 0;
             padding: 20px;
             color: #2e7d32;
+            font-size: 16px; /* Increased base font size */
         }
         h1 {
             color: #2e7d32;
             text-align: center;
+            font-size: 32px; /* Increased font size for h1 */
         }
         .container {
             max-width: 800px;
@@ -27,6 +29,7 @@
         }
         .detail-row {
             margin-bottom: 15px;
+            font-size: 20px; /* Increased font size for detail rows */
         }
         .detail-label {
             font-weight: bold;
@@ -35,7 +38,7 @@
         .status-badge {
             padding: 5px 10px;
             border-radius: 20px;
-            font-size: 0.8em;
+            font-size: 16px; /* Increased font size for status badge */
             font-weight: bold;
             color: #fff;
             background-color: #4CAF50;
@@ -51,6 +54,7 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 18px; /* Increased font size for action links */
         }
         .action-links a:hover {
             background-color: #45a049;
@@ -80,15 +84,7 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">Notes:</span>
-            <p>{{ booking.notes|linebreaks }}</p>
-        </div>
-        <div class="action-links">
-            <a href="{% url 'ot_booking_pdf' booking.id %}" target="_blank">
-                <i class="fas fa-file-pdf"></i> Print PDF
-            </a>
-            <a href="{% url 'ot_booking_update' booking.pk %}">Edit</a>
-            <a href="{% url 'ot_booking_delete' booking.pk %}">Delete</a>
-            <a href="{% url 'ot_booking_list' %}">Back to List</a>
+            <p style="font-size: 18px;">{{ booking.notes|linebreaks }}</p>
         </div>
     </div>
 </body>

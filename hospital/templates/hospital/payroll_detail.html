@@ -97,7 +97,8 @@
         <h1><i class="fas fa-file-invoice-dollar"></i> Payroll Detail</h1>
         <div class="employee-photo">
             {% if payroll.employee.photo %}
-                <img src="{{ payroll.employee.photo.url }}" alt="{{ payroll.employee.name }}">
+                <img src="{{ payroll.employee.photo.url }}" 
+                alt="{{ payroll.employee.name }}">
             {% else %}
                 <div class="no-photo">
                     <i class="fas fa-user"></i>
@@ -106,13 +107,28 @@
         </div>
         <div class="payroll-info">
             <p><strong>Employee:</strong> {{ payroll.employee.name }}</p>
-            <p><strong>Salary:</strong> ${{ payroll.salary }}</p>
-            <p><strong>Bonus:</strong> ${{ payroll.bonus }}</p>
-            <p><strong>Deductions:</strong> ${{ payroll.deductions }}</p>
-            <p><strong>Total Pay:</strong> ${{ payroll.total_pay }}</p>
+            <p><strong>Salary:</strong> {{ payroll.salary }}TK</p>
+            <p><strong>Bonus:</strong> {{ payroll.bonus }}TK</p>
+            <p><strong>Deductions:</strong> {{ payroll.deductions }}TK</p>
+            <p><strong>Total Pay:</strong> {{ payroll.total_pay }}TK</p>
             <p><strong>Pay Date:</strong> {{ payroll.pay_date }}</p>
         </div>
-        <a href="{% url 'payroll_list' %}" class="btn"><i class="fas fa-arrow-left"></i> Back to Payroll List</a>
+        <a href="{% url 'payroll_pdf' payroll.id %}" 
+            class="btn btn-primary" target="_blank">
+            <i class="fas fa-file-pdf"></i> Print PDF
+        </a>
+        <a href="{% url 'payroll_list' %}" class="btn">
+            <i class="fas fa-arrow-left"></i> 
+            Back to Payroll List
+        </a>
+        <a href="{% url 'payroll_edit' payroll.id %}" class="btn" 
+            style="padding: 5px 10px;">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a href="{% url 'payroll_delete' payroll.id %}" class="btn" 
+            style="padding: 5px 10px;">
+            <i class="fas fa-trash"></i> Delete
+        </a>
     </div>
 </body>
 </html>

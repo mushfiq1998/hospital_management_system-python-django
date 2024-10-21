@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            margin: 0;
+            padding: 20px;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 128, 0, 0.1);
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 10px;
+        }
+        .employee-photo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .employee-photo img, .no-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #4caf50;
+        }
+        .no-photo {
+            background-color: #c8e6c9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: #4caf50;
+        }
+        .payroll-info {
+            background-color: #f1f8e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-file-invoice-dollar"></i> Payroll Detail</h1>
+        <div class="employee-photo">
+            {% if payroll.employee.photo %}
+                <img src="{{ payroll.employee.photo.url }}" 
+                alt="{{ payroll.employee.name }}">
+            {% else %}
+                <div class="no-photo">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+        </div>
+        <div class="payroll-info">
+            <table>
+                <tr>
+                    <th>Employee</th>
+                    <td>{{ payroll.employee.name }}</td>
+                </tr>
+                <tr>
+                    <th>Salary</th>
+                    <td>{{ payroll.salary }}TK</td>
+                </tr>
+                <tr>
+                    <th>Bonus</th>
+                    <td>{{ payroll.bonus }}TK</td>
+                </tr>
+                <tr>
+                    <th>Deductions</th>
+                    <td>{{ payroll.deductions }}TK</td>
+                </tr>
+                <tr>
+                    <th>Total Pay</th>
+                    <td>{{ payroll.total_pay }}TK</td>
+                </tr>
+                <tr>
+                    <th>Pay Date</th>
+                    <td>{{ payroll.pay_date }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
