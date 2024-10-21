@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
@@ -66,6 +67,12 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f"Dr. {self.name}"
+
+    def get_absolute_url(self):
+        return reverse('doctor_detail', args=[str(self.id)])
+
+    def get_pdf_url(self):
+        return reverse('doctor_detail_pdf', args=[str(self.id)])
 
 
 class Appointment(models.Model):

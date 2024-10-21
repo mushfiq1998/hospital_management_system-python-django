@@ -219,6 +219,23 @@ def admit_patient(request, pk):
     return render(request, 'hospital/admit_patient.html', context)
 
 
+def patient_pdf(request, patient_id):
+    patient = get_object_or_404(Patient, id=patient_id)
+    template_path = 'hospital/patient_pdf.html'
+    context = {'patient': patient}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="patient_{patient_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
 # .......................................................................
 # Employee Views 
 @login_required
@@ -340,6 +357,22 @@ def doctor_create(request):
         form = DoctorForm()
     return render(request, 'hospital/doctor_form.html', {'form': form})
 
+
+def doctor_pdf(request, doctor_id):
+    doctor = get_object_or_404(Doctor, id=doctor_id)
+    template_path = 'hospital/doctor_pdf.html'
+    context = {'doctor': doctor}
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="doctor_{doctor_id}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+    
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 # ......................................................................
 # Appointment Views ....................................................

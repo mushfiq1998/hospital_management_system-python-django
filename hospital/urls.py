@@ -17,6 +17,8 @@ urlpatterns = [
     path('patients/<int:pk>/edit/', views.patient_edit, name='patient_edit'),
     path('patients/<int:pk>/delete/', views.patient_delete, name='patient_delete'),
     path('patients/<int:pk>/admit/', views.admit_patient, name='admit_patient'),
+    path('patients/<int:patient_id>/pdf/', views.patient_pdf, 
+         name='patient_pdf'),
 
     # Employee URLs
     path('employees/', views.employee_list, 
@@ -38,6 +40,8 @@ urlpatterns = [
     path('doctors/<int:pk>/', views.doctor_detail, name='doctor_detail'),
     path('doctors/<int:pk>/edit/', views.doctor_edit, name='doctor_edit'),
     path('doctors/<int:pk>/delete/', views.doctor_delete, name='doctor_delete'),
+    path('doctors/<int:doctor_id>/pdf/', views.doctor_pdf, 
+         name='doctor_pdf'),
 
     # Appointment URLs
     path('appointments/', views.appointment_list, 

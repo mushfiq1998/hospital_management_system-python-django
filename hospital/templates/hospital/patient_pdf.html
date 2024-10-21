@@ -3,12 +3,12 @@
 {% block content %}
 <div class="patient-details-container">
     <div class="patient-header">
-        <h1>Patient Details</h1>
+        <h2>Patient Details</h2>
     </div>
     <div class="patient-card">
         <div class="patient-photo">
             {% if patient.photo %}
-                <img src="{{ patient.photo.url }}" alt="{{ patient.name }}"
+                <img src="{{ patient.photo.path}}" alt="{{ patient.name }}"
                  class="patient-image">
             {% else %}
                 <div class="no-photo">
@@ -17,7 +17,7 @@
             {% endif %}
         </div>
         <div class="patient-info">
-            <h2>{{ patient.name }}</h2>
+            <h3>{{ patient.name }}</h3>
             <ul class="info-list">
                 <li><i class="fas fa-birthday-cake"></i> 
                     <strong>Date of Birth:</strong> 
@@ -48,7 +48,7 @@
     </div>
     <div class="patient-status">
         <div class="status-item">
-            <h3><i class="fas fa-bed"></i> Bed Assignment</h3>
+            <h4><i class="fas fa-bed"></i> Bed Assignment</h4>
             {% if patient.bed %}
                 <p class="status-info">
                     {{ patient.bed.number }} in {{ patient.bed.ward.name }}
@@ -61,7 +61,7 @@
             {% endif %}
         </div>
         <div class="status-item">
-            <h3><i class="fas fa-hospital-user"></i> Admission Status</h3>
+            <h4><i class="fas fa-hospital-user"></i> Admission Status</h4>
             {% if patient.is_admitted %}
                 <p class="status-info">Admitted on {{ patient.admission_date }}</p>
             {% else %}
@@ -70,49 +70,43 @@
                 class="btn btn-primary">Admit Patient
             </a>
             {% endif %}
-            <a href="{% url 'patient_pdf' patient.id %}" 
-            class="btn btn-primary" target="_blank">
-            <i class="fas fa-file-pdf"></i> Print PDF
-        </a>
         </div>
-
-        <!-- <a href="{% url 'patient_pdf' patient.id %}" 
-            class="btn btn-primary" target="_blank">
-            <i class="fas fa-file-pdf"></i> Print PDF
-        </a> -->
-
     </div>
 </div>
 
 <style>
-    .patient-details-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #e8f5e9;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 128, 0, 0.1);
+    body {
+        font-size: 14px;
     }
 
-    .patient-header h1 {
+    .patient-details-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 15px;
+        background-color: #e8f5e9;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 128, 0, 0.1);
+    }
+
+    .patient-header h2 {
         color: #2e7d32;
         text-align: center;
-        margin-bottom: 30px;
-        font-size: 2.5em;
-        border-bottom: 2px solid #4caf50;
-        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 1px solid #4caf50;
+        padding-bottom: 8px;
     }
 
     .patient-card {
         display: flex;
         background-color: #ffffff;
-        border-radius: 8px;
+        border-radius: 6px;
         overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 128, 0, 0.1);
+        box-shadow: 0 3px 4px rgba(0, 128, 0, 0.1);
     }
 
     .patient-photo {
-        flex: 0 0 200px;
+        flex: 0 0 150px;
         background-color: #c8e6c9;
         display: flex;
         align-items: center;
@@ -120,8 +114,8 @@
     }
 
     .patient-image, .no-photo {
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
         object-fit: cover;
     }
@@ -131,19 +125,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 80px;
+        font-size: 70px;
         color: #e8f5e9;
     }
 
     .patient-info {
         flex: 1;
-        padding: 20px;
+        padding: 15px;
     }
 
-    .patient-info h2 {
+    .patient-info h3 {
         color: #2e7d32;
-        margin-bottom: 20px;
-        font-size: 1.8em;
+        margin-bottom: 15px;
+        font-size: 1.5em;
     }
 
     .info-list {
@@ -154,51 +148,54 @@
     .info-list li {
         margin-bottom: 10px;
         color: #1b5e20;
+        font-size: 1em;
     }
 
     .info-list i {
-        width: 25px;
+        width: 20px;
         color: #4caf50;
     }
 
     .patient-status {
         display: flex;
         justify-content: space-between;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     .status-item {
         flex: 0 0 48%;
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 128, 0, 0.1);
+        padding: 15px;
+        border-radius: 6px;
+        box-shadow: 0 2px 3px rgba(0, 128, 0, 0.1);
     }
 
-    .status-item h3 {
+    .status-item h4 {
         color: #2e7d32;
-        margin-bottom: 15px;
-        font-size: 1.3em;
+        margin-bottom: 10px;
+        font-size: 1.2em;
     }
 
     .status-item i {
         color: #4caf50;
-        margin-right: 10px;
+        margin-right: 8px;
     }
 
     .status-info {
         color: #1b5e20;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+        font-size: 1em;
     }
 
     .btn-primary {
         background-color: #4caf50;
         color: #ffffff;
         padding: 10px 15px;
-        border-radius: 5px;
+        border-radius: 4px;
         text-decoration: none;
         display: inline-block;
         transition: background-color 0.3s ease;
+        font-size: 1em;
     }
 
     .btn-primary:hover {

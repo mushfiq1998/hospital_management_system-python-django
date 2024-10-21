@@ -4,48 +4,52 @@
 {% block title %}Employee Detail - {{ employee.full_name }}{% endblock %}
 
 {% block content %}
-<div class="employee-detail-container">
-    <div class="employee-card">
-        <div class="employee-header">
-            <h1>{{ employee.full_name }}</h1>
-            <p class="employee-position">{{ employee.position }}</p>
-        </div>
-        <div class="employee-photo-container">
-            {% if employee.photo %} 
-                <img src="{{ employee.photo.url }}" alt="{{ employee.full_name }}" class="employee-photo">
-            {% else %}
-                <div class="no-photo">
-                    <i class="fas fa-user-circle"></i>
+<div class="container mt-5">
+    <div class="employee-detail-container">
+        <div class="employee-card">
+            <div class="employee-header">
+                <h1>{{ employee.name }}</h1>
+                <p class="employee-position">{{ employee.position }}</p>
+            </div>
+            <div class="employee-photo-container">
+                {% if employee.photo %}
+                    <img src="{{ employee.photo.url }}" alt="{{ employee.name }}" class="employee-photo">
+                {% else %}
+                    <div class="no-photo">
+                        {{ employee.name|make_list|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="employee-info">
+                <div class="info-item">
+                    <i class="fas fa-id-badge"></i>
+                    <span>Employee ID: {{ employee.employee_id }}</span>
                 </div>
-            {% endif %}
-        </div>
-        <div class="employee-info">
-            <div class="info-item">
-                <i class="fas fa-building"></i>
-                <span><strong>Department:</strong> {{ employee.department }}</span>
+                <div class="info-item">
+                    <i class="fas fa-building"></i>
+                    <span>Department: {{ employee.department }}</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email: {{ employee.email }}</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>Phone: {{ employee.phone_number }}</span>
+                </div>
+                <!-- Add more details as needed -->
             </div>
-            <div class="info-item">
-                <i class="fas fa-phone"></i>
-                <span><strong>Phone:</strong> {{ employee.phone_number }}</span>
+            <div class="button-container">
+                <a href="{% url 'employee_pdf' employee.id %}" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Print PDF
+                </a>
+                <a href="{% url 'employee_edit' employee.id %}" class="btn btn-secondary">
+                    <i class="fas fa-user-edit"></i> Edit
+                </a>
+                <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee? This action cannot be undone.');">
+                    <i class="fas fa-user-minus"></i>Delete
+                </a>
             </div>
-            <div class="info-item">
-                <i class="fas fa-envelope"></i>
-                <span><strong>Email:</strong> {{ employee.email }}</span>
-            </div>
-        </div>
-        <div class="button-container">
-            <a href="{% url 'employee_edit' employee.pk %}" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Edit
-            </a>
-            <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i> Delete
-            </a>
-            <a href="{% url 'employee_list' %}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
-            <a href="{% url 'employee_pdf' employee.pk %}" class="btn btn-info">
-                <i class="fas fa-file-pdf"></i> Print PDF
-            </a>
         </div>
     </div>
 </div>
@@ -134,12 +138,13 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: 15px;
+        margin-top: 2rem;
     }
 
-    /* Button styling with more specificity */
+    /* Updated button styling */
     .button-container .btn {
         padding: 12px 24px !important;
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
         font-weight: 700 !important;
         border-radius: 30px !important;
         text-transform: uppercase !important;
@@ -166,37 +171,29 @@
         left: 100%;
     }
 
-    /* Specific button color styles */
+    /* Green theme for all buttons */
     .button-container .btn-primary {
-        background-color: #388e3c !important;
+        background-color: #4caf50 !important;
     }
 
     .button-container .btn-primary:hover {
-        background-color: #2e7d32 !important;
-    }
-
-    .button-container .btn-danger {
-        background-color: #e53935 !important;
-    }
-
-    .button-container .btn-danger:hover {
-        background-color: #d32f2f !important;
+        background-color: #45a049 !important;
     }
 
     .button-container .btn-secondary {
-        background-color: #81c784 !important;
-    }
-
-    .button-container .btn-secondary:hover {
         background-color: #66bb6a !important;
     }
 
-    .button-container .btn-info {
-        background-color: #0288d1 !important;
+    .button-container .btn-secondary:hover {
+        background-color: #5cb860 !important;
     }
 
-    .button-container .btn-info:hover {
-        background-color: #0277bd !important;
+    .button-container .btn-danger {
+        background-color: #81c784 !important;
+    }
+
+    .button-container .btn-danger:hover {
+        background-color: #74b816 !important;
     }
 
     .button-container .btn i {
